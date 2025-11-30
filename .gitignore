@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+*.egg-info/
+
+# Training logs and results
+action.txt
+task.txt
+training_results_grid.png
+action_space_analysis.png
+old_results/
+
+# macOS
+.DS_Store

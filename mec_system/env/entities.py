@@ -1,6 +1,6 @@
 
 import numpy as np
-from mec_system.config import *
+from mec_system.config import Config
 
 class Task:
     def __init__(self, task_id, creation_time):
@@ -8,18 +8,21 @@ class Task:
         self.creation_time = creation_time
         
         # Randomly generate task characteristics based on config ranges
-        self.data_size = np.random.uniform(TASK_DATA_SIZE_MIN, TASK_DATA_SIZE_MAX)
-        self.cpu_cycles_per_bit = np.random.uniform(TASK_CPU_CYCLES_PER_BIT_MIN, TASK_CPU_CYCLES_PER_BIT_MAX)
-        self.deadline = np.random.uniform(TASK_DEADLINE_MIN, TASK_DEADLINE_MAX)
+        self.data_size = np.random.uniform(Config.task.DATA_SIZE_MIN, Config.task.DATA_SIZE_MAX)
+        self.result_size = self.data_size * 0.1 # Assume result is 10% of input size
+        self.cpu_cycles_per_bit = np.random.uniform(Config.task.CPU_CYCLES_PER_BIT_MIN, Config.task.CPU_CYCLES_PER_BIT_MAX)
         
+        # Deadline: uniform range 2.0 to 2.5 seconds
+        self.deadline = np.random.uniform(2.0, 2.5)
+            
         self.total_cpu_cycles = self.data_size * self.cpu_cycles_per_bit
-        self.vulnerability = np.random.uniform(TASK_VULNERABILITY_MIN, TASK_VULNERABILITY_MAX)
+        self.vulnerability = np.random.uniform(Config.reliability.TASK_VULNERABILITY_MIN, Config.reliability.TASK_VULNERABILITY_MAX)
 
 class MobileDevice:
     def __init__(self, device_id, associated_edge_id):
         self.device_id = device_id
         self.associated_edge_id = associated_edge_id
-        self.cpu_capacity = DEVICE_CPU_CAPACITY
+        self.cpu_capacity = Config.system.DEVICE_CPU_CAPACITY
         
     def generate_task(self, time_step):
         # Simple task generation logic (can be made more complex, e.g., Poisson process)
@@ -28,13 +31,13 @@ class MobileDevice:
 class EdgeServer:
     def __init__(self, server_id):
         self.server_id = server_id
-        self.cpu_capacity = EDGE_CPU_CAPACITY
-        self.bandwidth_capacity = EDGE_BANDWIDTH_CAPACITY
-        self.storage_capacity = EDGE_STORAGE_CAPACITY
+        self.cpu_capacity = Config.system.EDGE_CPU_CAPACITY
+        self.bandwidth_capacity = Config.system.EDGE_BANDWIDTH_CAPACITY
+        self.storage_capacity = Config.system.EDGE_STORAGE_CAPACITY
         
         # M/M/1/K Queue state
         self.queue = [] # List of tasks
-        self.max_queue_size = MAX_QUEUE_SIZE
+        self.max_queue_size = Config.system.MAX_QUEUE_SIZE
         
         # Current Load (for observation)
         self.current_cpu_load = 0.0
@@ -43,7 +46,7 @@ class EdgeServer:
         
         # Stats
         self.arrival_rate = 0.0 # lambda
-        self.service_rate = self.cpu_capacity / ((TASK_CPU_CYCLES_PER_BIT_MIN + TASK_CPU_CYCLES_PER_BIT_MAX) / 2 * (TASK_DATA_SIZE_MIN + TASK_DATA_SIZE_MAX) / 2) # approx mu
+        self.service_rate = self.cpu_capacity / ((Config.task.CPU_CYCLES_PER_BIT_MIN + Config.task.CPU_CYCLES_PER_BIT_MAX) / 2 * (Config.task.DATA_SIZE_MIN + Config.task.DATA_SIZE_MAX) / 2) # approx mu
         
     def update_load(self):
         # Simplified load calculation based on queue length or active tasks
