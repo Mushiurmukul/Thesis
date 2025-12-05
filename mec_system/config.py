@@ -2,10 +2,10 @@ from dataclasses import dataclass
 
 @dataclass
 class SystemConfig:
-    NUM_EDGE_SERVERS: int = 3
-    NUM_DEVICES_PER_SERVER: int = 3  # Reduced to make system stable (9 tasks/sec total)
+    NUM_EDGE_SERVERS: int = 5
+    NUM_DEVICES_PER_SERVER: int = 20  # Reduced to make system stable (9 tasks/sec total)
     NUM_TIME_STEPS: int = 100  # Reduced for faster 1000-episode run
-    TIME_SLOT_DURATION: float = 1 # seconds (Increased to allow queue clearing)
+    TIME_SLOT_DURATION: float = 7 # seconds (Increased to allow queue clearing)
     
     # Resource Capacities (Based on 2024-2025 Research)
     # Local MEC Server: 3-5 GHz per core, 10-20 GHz total (Liu et al. 2025)
@@ -16,7 +16,7 @@ class SystemConfig:
     DEVICE_CPU_CAPACITY: float = 1e9    # 1 GHz
     EDGE_BANDWIDTH_CAPACITY: float = 1e9 # 1 Gbps
     EDGE_STORAGE_CAPACITY: float = 50e9  # 50 GB
-    MAX_QUEUE_SIZE: int = 25  # Reduced to make congestion more apparent
+    MAX_QUEUE_SIZE: int = 20  # Reduced to make congestion more apparent
 
 @dataclass
 class TaskConfig:
@@ -70,7 +70,7 @@ class TrainingConfig:
     # Fairness Threshold: 0.7-0.8 (Jain's Index)
     FAIRNESS_THRESHOLD: float = 0.80
     # Reliability Threshold: 95%-99.9% (URLLC targets 99.999%, general MEC ~99%)
-    RELIABILITY_THRESHOLD: float = 0.95
+    RELIABILITY_THRESHOLD: float = 0.80
     
     # PPO Parameters
     LR_ACTOR: float = 1.5e-4
@@ -83,7 +83,7 @@ class TrainingConfig:
     ENTROPY_COEF: float = 0.001  # Reduced for Beta distribution
     
     # Dual Ascent
-    MAX_LAMBDA: float = 0.5
+    MAX_LAMBDA: float = 5.0
 
 # Global Configuration Instance
 class Config:

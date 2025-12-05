@@ -20,7 +20,7 @@ def main():
     print(f"  - Action Components per Device: 2 (alpha, mu)")
     print("-" * 50)
         
-    num_episodes = 1000
+    num_episodes = 12000
     
     # Metrics History
     history = {

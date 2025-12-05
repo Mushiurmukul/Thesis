@@ -12,10 +12,20 @@ class Task:
         self.result_size = self.data_size * 0.1 # Assume result is 10% of input size
         self.cpu_cycles_per_bit = np.random.uniform(Config.task.CPU_CYCLES_PER_BIT_MIN, Config.task.CPU_CYCLES_PER_BIT_MAX)
         
-        # Deadline: uniform range 2.0 to 2.5 seconds
-        self.deadline = np.random.uniform(2.0, 2.5)
-            
+        # Calculate total CPU cycles first (needed for deadline calculation)
         self.total_cpu_cycles = self.data_size * self.cpu_cycles_per_bit
+        
+        # Deadline: proportional to task size
+        # Base deadline: 0.5-1.0 seconds for small tasks
+        # Plus additional time based on task complexity (total CPU cycles)
+        # Normalize by typical CPU cycles to get reasonable time values
+        base_deadline = np.random.uniform(0.5, 1.0)
+        # Scale factor: larger tasks get more time
+        # Assuming typical CPU cycles range, this adds 1-3 seconds for large tasks
+        task_complexity_factor = self.total_cpu_cycles / (Config.task.CPU_CYCLES_PER_BIT_MAX * Config.task.DATA_SIZE_MAX)
+        additional_time = task_complexity_factor * np.random.uniform(1.5, 2.5)
+        self.deadline = base_deadline + additional_time
+            
         self.vulnerability = np.random.uniform(Config.reliability.TASK_VULNERABILITY_MIN, Config.reliability.TASK_VULNERABILITY_MAX)
 
 class MobileDevice:
