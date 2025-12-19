@@ -70,3 +70,8 @@ The implementation follows a decentralized approach where each Edge Server acts 
 1. **Fairness**: Ensuring resources are distributed fairly among servers (Jain's Index).
 2. **Reliability**: Ensuring task success probability meets a threshold.
 3. **Deadline**: Ensuring tasks complete within their maximum tolerable delay.
+
+## Result : <img width="2400" height="1000" alt="training_results_grid" src="https://github.com/user-attachments/assets/da47b15e-d6bc-4f94-b090-3cd939573958" />
+<img width="1000" height="600" alt="entropy_plot_new" src="https://github.com/user-attachments/assets/d9fec616-c8d5-426e-b37f-a686bb6972d6" />
+
+
